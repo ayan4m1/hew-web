@@ -1,7 +1,3 @@
-import { createElement } from 'react';
-
-/* eslint-disable react/display-name, react/prop-types */
-
 /**
  * Creates an object containing action constants namespaced under the specified reducer.
  *
@@ -18,13 +14,3 @@ export function buildActions(reducer, actions) {
 
   return result;
 }
-
-/**
- * Creates a mock component which will expose its props for snapshot testing purposes.
- *
- * @param {string} name The component/element name (e.g. "MyComponent")
- * @param {object} props An object containing props to setup
- * @return {object} Mock component with specified name and props
- */
-export const mockComponent = (name, props = {}) => () =>
-  createElement(name, props, props.children);
