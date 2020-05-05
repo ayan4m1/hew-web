@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { all, takeLatest, select, put, call } from 'redux-saga/effects';
+import { all, takeEvery, select, put, call } from 'redux-saga/effects';
 
 import { types, actions } from 'reducers/application';
 import { getDevices } from 'selectors/application';
@@ -23,14 +23,16 @@ function* controlDeviceWorker({ hostname, settings }) {
       throw new Error(response.body);
     }
 
-    yield put(actions.controlDeviceSuccess());
+    yield put(actions.appendNetworkLog(`${hostname} updated successfully!`));
   } catch (error) {
-    yield put(actions.controlDeviceFailure(error.message));
+    yield put(
+      actions.appendNetworkLog(`Error updating ${hostname}: ${error.message}`)
+    );
   }
 }
 
 function* controlDeviceWatcher() {
-  yield takeLatest(types.CONTROL_DEVICE, controlDeviceWorker);
+  yield takeEvery(types.CONTROL_DEVICE, controlDeviceWorker);
 }
 
 export const workers = { controlDeviceWorker };

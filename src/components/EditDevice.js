@@ -20,7 +20,9 @@ export default function EditDevice(props) {
       <Card.Body>
         <Card.Title>
           <Row>
-            <Col>{hostname}</Col>
+            <Col>
+              <h3>{hostname}</h3>
+            </Col>
             <Col xs={3}>
               <Button variant="danger" onClick={handleDelete}>
                 <FontAwesomeIcon icon="trash" />
@@ -28,9 +30,6 @@ export default function EditDevice(props) {
             </Col>
           </Row>
         </Card.Title>
-        <Row>
-          <Col></Col>
-        </Row>
       </Card.Body>
     </Card>
   );

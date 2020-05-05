@@ -1,10 +1,20 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
+  faEraser,
   faLightbulb,
   faPlusCircle,
   faServer,
   faSlidersH,
-  faTrash
+  faTrash,
+  faUpload
 } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faLightbulb, faPlusCircle, faServer, faSlidersH, faTrash);
+library.add(
+  faEraser,
+  faLightbulb,
+  faPlusCircle,
+  faServer,
+  faSlidersH,
+  faTrash,
+  faUpload
+);

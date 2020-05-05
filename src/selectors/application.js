@@ -16,3 +16,8 @@ export const getDevices = createSelector(
   getApplication,
   (application) => application.devices
 );
+
+export const getNetworkLog = createSelector(
+  getApplication,
+  (application) => application.networkLog
+);

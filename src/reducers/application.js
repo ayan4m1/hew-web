@@ -2,6 +2,8 @@ import { buildActions } from 'utils';
 
 export const types = buildActions('application', [
   'ADD_DEVICE',
+  'APPEND_NETWORK_LOG',
+  'CLEAR_NETWORK_LOG',
   'CONTROL_DEVICE',
   'CONTROL_DEVICE_FAILURE',
   'CONTROL_DEVICE_SUCCESS',
@@ -16,19 +18,19 @@ const addDevice = (device) => ({
   device
 });
 
+const appendNetworkLog = (message) => ({
+  type: types.APPEND_NETWORK_LOG,
+  message
+});
+
+const clearNetworkLog = () => ({
+  type: types.CLEAR_NETWORK_LOG
+});
+
 const controlDevice = (hostname, settings) => ({
   type: types.CONTROL_DEVICE,
   hostname,
   settings
-});
-
-const controlDeviceFailure = (error) => ({
-  type: types.CONTROL_DEVICE_FAILURE,
-  error
-});
-
-const controlDeviceSuccess = () => ({
-  type: types.CONTROL_DEVICE_SUCCESS
 });
 
 const editDevice = (hostname, device) => ({
@@ -54,9 +56,9 @@ const setColor = (color) => ({
 
 export const actions = {
   addDevice,
+  appendNetworkLog,
+  clearNetworkLog,
   controlDevice,
-  controlDeviceFailure,
-  controlDeviceSuccess,
   editDevice,
   removeDevice,
   setBrightness,
@@ -70,11 +72,33 @@ export const initialState = {
     g: 0,
     b: 0
   },
-  devices: []
+  devices: [],
+  networkLog: []
 };
 
 export const reducer = (state = initialState, action = {}) => {
   switch (action.type) {
+    case types.APPEND_NETWORK_LOG: {
+      // keep most recent 20 entries
+      const entry = {
+        message: action.message,
+        timestamp: Date.now()
+      };
+      const newLog = [entry, ...state.networkLog].slice(
+        0,
+        Math.min(20, state.networkLog.length + 1)
+      );
+
+      return {
+        ...state,
+        networkLog: newLog
+      };
+    }
+    case types.CLEAR_NETWORK_LOG:
+      return {
+        ...state,
+        networkLog: []
+      };
     case types.ADD_DEVICE: {
       const existingDevice = state.devices.find(
         (device) => device.hostname === action.device.hostname
