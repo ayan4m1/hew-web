@@ -12,7 +12,7 @@ export default function EditDevice(props) {
   const dispatch = useDispatch();
   const handleDelete = useCallback(() => {
     dispatch(actions.removeDevice(hostname));
-  }, [dispatch]);
+  }, [dispatch, hostname]);
 
   return (
     <Card>
