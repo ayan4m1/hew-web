@@ -8,6 +8,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
 import { applyMiddleware, createStore, compose } from 'redux';
+import persistState from 'redux-localstorage';
 
 import './icons.js';
 
@@ -22,7 +23,7 @@ const composer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 /* eslint-enable */
 
 const sagaMiddleware = createSagaMiddleware();
-const enhancers = composer(applyMiddleware(sagaMiddleware));
+const enhancers = composer(applyMiddleware(sagaMiddleware), persistState());
 
 export const store = createStore(rootReducer, {}, enhancers);
 
