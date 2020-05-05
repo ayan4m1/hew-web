@@ -13,6 +13,7 @@ import { SketchPicker } from 'react-color';
 
 import { actions } from 'reducers/application';
 import { getBrightness, getColor, getDevices } from 'selectors/application';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default function Control() {
   const dispatch = useDispatch();
@@ -85,9 +86,15 @@ export default function Control() {
 
   return (
     <Container>
+      <Row className="mt-4">
+        <Col>
+          <h1>
+            <FontAwesomeIcon icon="sliders-h" /> Control
+          </h1>
+        </Col>
+      </Row>
       <Card>
         <Card.Body>
-          <Card.Title>Control your Devices</Card.Title>
           <Form>
             <Row>
               <Col md={4}>
@@ -168,7 +175,11 @@ export default function Control() {
               </Col>
               <Form.Group as={Col} md={4}>
                 <Form.Label>Color</Form.Label>
-                <SketchPicker color={color} onChangeComplete={handleSetColor} />
+                <SketchPicker
+                  disableAlpha
+                  color={color}
+                  onChangeComplete={handleSetColor}
+                />
               </Form.Group>
               <Col md={4}>
                 <Button

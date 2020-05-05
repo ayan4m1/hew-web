@@ -4,7 +4,7 @@ import { Switch, Route } from 'react-router-dom';
 import Header from 'components/Header';
 import Control from 'components/Control';
 import Overview from 'components/Overview';
-import Settings from 'components/Settings';
+import Devices from 'components/Devices';
 
 export default function App() {
   return (
@@ -17,8 +17,8 @@ export default function App() {
         <Route exact path="/control">
           <Control />
         </Route>
-        <Route exact path="/settings">
-          <Settings />
+        <Route exact path="/devices">
+          <Devices />
         </Route>
       </Switch>
     </Fragment>

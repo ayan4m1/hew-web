@@ -75,11 +75,20 @@ export const initialState = {
 
 export const reducer = (state = initialState, action = {}) => {
   switch (action.type) {
-    case types.ADD_DEVICE:
+    case types.ADD_DEVICE: {
+      const existingDevice = state.devices.find(
+        (device) => device.hostname === action.device.hostname
+      );
+
+      if (existingDevice) {
+        return state;
+      }
+
       return {
         ...state,
         devices: [...state.devices, action.device]
       };
+    }
     case types.EDIT_DEVICE: {
       const newDevices = [...state.devices];
       const replaceIndex = state.devices.findIndex(

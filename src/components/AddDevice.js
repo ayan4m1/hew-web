@@ -1,39 +1,64 @@
-import React, { useState } from 'react';
-import { Card, Form, Button } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useState, useCallback } from 'react';
+import { Card, Form, Button, InputGroup } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { actions } from 'reducers/application';
+import { getDevices } from 'selectors/application';
 
 export default function AddDevice() {
+  const devices = useSelector(getDevices);
   const [hostname, setHostname] = useState('');
+  const [duplicateHostname, setDuplicateHostname] = useState(false);
   const dispatch = useDispatch();
 
-  const handleSubmit = () => {
-    // handle dupe checking here
-
+  const handleSubmit = useCallback(() => {
     dispatch(
       actions.addDevice({
-        hostname
+        hostname: `${hostname}.local`
       })
     );
-  };
+  }, [dispatch, hostname]);
+
+  const handleHostnameChange = useCallback(
+    (event) => {
+      const { value } = event.target;
+      const existingDevice = devices.find(
+        (device) => device.hostname === `${value}.local`
+      );
+
+      setDuplicateHostname(Boolean(existingDevice));
+      setHostname(event.target.value);
+    },
+    [devices, setDuplicateHostname, setHostname]
+  );
 
   return (
-    <Card>
+    <Card className="my-4">
       <Card.Body>
-        <Card.Title>Add a Device</Card.Title>
-        <Form>
-          <Form.Group>
-            <Form.Label>Hostname</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="example.local"
-              value={hostname}
-              onChange={(event) => setHostname(event.target.value)}
-            ></Form.Control>
-          </Form.Group>
-          <Button onClick={handleSubmit}>Add</Button>
-        </Form>
+        <Card.Title>Add Device</Card.Title>
+        <InputGroup>
+          <Form.Control
+            type="text"
+            placeholder="hostname"
+            value={hostname}
+            onChange={handleHostnameChange}
+            isInvalid={duplicateHostname}
+          />
+          <InputGroup.Append>
+            <InputGroup.Text>.local</InputGroup.Text>
+            <Button
+              variant="success"
+              disabled={hostname === '' || duplicateHostname}
+              onClick={handleSubmit}
+            >
+              <FontAwesomeIcon icon="plus-circle" />
+            </Button>
+          </InputGroup.Append>
+          <Form.Control.Feedback type="invalid">
+            A device with this hostname already exists.
+          </Form.Control.Feedback>
+        </InputGroup>
       </Card.Body>
     </Card>
   );

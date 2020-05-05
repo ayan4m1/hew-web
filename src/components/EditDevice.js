@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
 import React, { useCallback } from 'react';
 import { Button, Card, Row, Col } from 'react-bootstrap';
@@ -19,9 +20,11 @@ export default function EditDevice(props) {
       <Card.Body>
         <Card.Title>
           <Row>
-            <Col>Device {hostname}</Col>
+            <Col>{hostname}</Col>
             <Col xs={3}>
-              <Button onClick={handleDelete}>Delete</Button>
+              <Button variant="danger" onClick={handleDelete}>
+                <FontAwesomeIcon icon="trash" />
+              </Button>
             </Col>
           </Row>
         </Card.Title>
