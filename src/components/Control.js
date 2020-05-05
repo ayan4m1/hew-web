@@ -20,20 +20,35 @@ export default function Control() {
   const color = useSelector(getColor);
   const devices = useSelector(getDevices);
   const [recipientType, setRecipientType] = useState('all');
-  const [recipients, setRecipients] = useState([]);
+  const [selectedDevices, setSelectedDevices] = useState([]);
 
   const handleSend = useCallback(() => {
+    let recipients = [];
+
+    switch (recipientType) {
+      case 'all':
+        recipients = devices;
+        break;
+      case 'some':
+        recipients = devices.filter((device) =>
+          selectedDevices.includes(device.hostname)
+        );
+        break;
+      default:
+        break;
+    }
+
     for (const recipient of recipients) {
       dispatch(
-        actions.controlDevice(recipient, {
+        actions.controlDevice(recipient.hostname, {
           r: color.r,
           g: color.g,
           b: color.b,
-          br: brightness
+          br: parseInt(brightness, 10)
         })
       );
     }
-  }, [dispatch, recipients, color, brightness]);
+  }, [brightness, color, devices, dispatch, recipientType, selectedDevices]);
 
   const handleSetRecipientType = useCallback(
     (event) => setRecipientType(event.target.value),
@@ -51,22 +66,13 @@ export default function Control() {
   );
 
   const handleUpdateRecipients = useCallback(
-    (event) => {
-      const selectedOptions = [...event.target.options]
-        .filter((option) => option.selected)
-        .map((option) => option.value);
-
-      if (recipientType === 'all') {
-        setRecipients(devices.map((device) => device.hostname));
-      } else if (recipientType === 'some') {
-        setRecipients(
-          devices
-            .filter((device) => selectedOptions.includes(device.hostname))
-            .map((device) => device.hostname)
-        );
-      }
-    },
-    [recipientType, devices]
+    (event) =>
+      setSelectedDevices(
+        [...event.target.options]
+          .filter((option) => option.selected)
+          .map((option) => option.value)
+      ),
+    [setSelectedDevices]
   );
 
   let powerColorClass = 'success';
@@ -118,6 +124,7 @@ export default function Control() {
                       as="select"
                       multiple
                       onChange={handleUpdateRecipients}
+                      value={selectedDevices}
                     >
                       {devices.map((device) => (
                         <option key={device.hostname} value={device.hostname}>
