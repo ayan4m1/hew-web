@@ -7,12 +7,13 @@ module.exports = {
     es6: true,
     node: true
   },
-  plugins: ['import', 'react', 'prettier', 'jsx-a11y'],
+  plugins: ['import', 'react', 'prettier', 'jsx-a11y', 'react-hooks'],
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:prettier/recommended',
     'plugin:jsx-a11y/recommended',
+    'plugin:react-hooks/recommended',
     'plugin:import/errors',
     'prettier',
     'prettier/react'
