@@ -39,18 +39,18 @@ export default function AddDevice() {
         <Card.Title>Add Device</Card.Title>
         <InputGroup>
           <Form.Control
-            type="text"
-            placeholder="hostname"
-            value={hostname}
-            onChange={handleHostnameChange}
             isInvalid={duplicateHostname}
+            onChange={handleHostnameChange}
+            placeholder="hostname"
+            type="text"
+            value={hostname}
           />
           <InputGroup.Append>
             <InputGroup.Text>.local</InputGroup.Text>
             <Button
-              variant="success"
               disabled={hostname === '' || duplicateHostname}
               onClick={handleSubmit}
+              variant="success"
             >
               <FontAwesomeIcon icon="plus-circle" />
             </Button>
