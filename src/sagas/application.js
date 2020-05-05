@@ -9,7 +9,7 @@ function* controlDeviceWorker({ hostname, settings }) {
     const devices = yield select(getDevices);
     const device = devices.find((dev) => dev.hostname === hostname);
 
-    if (device) {
+    if (!device) {
       throw new Error(`Invalid device ${hostname} specified`);
     }
 
@@ -25,7 +25,7 @@ function* controlDeviceWorker({ hostname, settings }) {
 
     yield put(actions.controlDeviceSuccess());
   } catch (error) {
-    yield put(actions.controlDeviceFailure(error));
+    yield put(actions.controlDeviceFailure(error.message));
   }
 }
 
