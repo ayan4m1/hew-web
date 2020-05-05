@@ -1,3 +1,9 @@
-.hew-range {
-  width: unset;
+.hew {
+  &-range {
+    width: unset;
+  }
+
+  &-send {
+    height: 100%;
+  }
 }
