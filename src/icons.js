@@ -5,6 +5,7 @@ import {
   faPlusCircle,
   faServer,
   faSlidersH,
+  faSpinner,
   faTrash,
   faUpload
 } from '@fortawesome/free-solid-svg-icons';
@@ -15,6 +16,7 @@ library.add(
   faPlusCircle,
   faServer,
   faSlidersH,
+  faSpinner,
   faTrash,
   faUpload
 );

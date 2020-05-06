@@ -21,3 +21,8 @@ export const getNetworkLog = createSelector(
   getApplication,
   (application) => application.networkLog
 );
+
+export const getPendingRequests = createSelector(
+  getApplication,
+  (application) => application.pendingRequests
+);

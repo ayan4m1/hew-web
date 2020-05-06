@@ -2,6 +2,7 @@ import { buildActions } from 'utils';
 
 export const types = buildActions('application', [
   'ADD_DEVICE',
+  'ADD_PENDING_REQUEST',
   'APPEND_NETWORK_LOG',
   'CLEAR_NETWORK_LOG',
   'CONTROL_DEVICE',
@@ -9,6 +10,7 @@ export const types = buildActions('application', [
   'CONTROL_DEVICE_SUCCESS',
   'EDIT_DEVICE',
   'REMOVE_DEVICE',
+  'REMOVE_PENDING_REQUEST',
   'SET_BRIGHTNESS',
   'SET_COLOR'
 ]);
@@ -16,6 +18,11 @@ export const types = buildActions('application', [
 const addDevice = (device) => ({
   type: types.ADD_DEVICE,
   device
+});
+
+const addPendingRequest = (hostname) => ({
+  type: types.ADD_PENDING_REQUEST,
+  hostname
 });
 
 const appendNetworkLog = (message) => ({
@@ -44,6 +51,11 @@ const removeDevice = (hostname) => ({
   hostname
 });
 
+const removePendingRequest = (hostname) => ({
+  type: types.REMOVE_PENDING_REQUEST,
+  hostname
+});
+
 const setBrightness = (brightness) => ({
   type: types.SET_BRIGHTNESS,
   brightness
@@ -56,11 +68,13 @@ const setColor = (color) => ({
 
 export const actions = {
   addDevice,
+  addPendingRequest,
   appendNetworkLog,
   clearNetworkLog,
   controlDevice,
   editDevice,
   removeDevice,
+  removePendingRequest,
   setBrightness,
   setColor
 };
@@ -73,11 +87,39 @@ export const initialState = {
     b: 0
   },
   devices: [],
-  networkLog: []
+  networkLog: [],
+  pendingRequests: []
 };
 
 export const reducer = (state = initialState, action = {}) => {
   switch (action.type) {
+    case types.ADD_PENDING_REQUEST: {
+      if (state.pendingRequests.includes(action.hostname)) {
+        return state;
+      } else {
+        return {
+          ...state,
+          pendingRequests: [...state.pendingRequests, action.hostname]
+        };
+      }
+    }
+    case types.REMOVE_PENDING_REQUEST: {
+      const newRequests = [...state.pendingRequests];
+      const replaceIndex = newRequests.findIndex(
+        (hostname) => hostname === action.hostname
+      );
+
+      if (replaceIndex === -1) {
+        return state;
+      }
+
+      newRequests.splice(replaceIndex, 1);
+
+      return {
+        ...state,
+        pendingRequests: newRequests
+      };
+    }
     case types.APPEND_NETWORK_LOG: {
       // keep most recent 20 entries
       const entry = {

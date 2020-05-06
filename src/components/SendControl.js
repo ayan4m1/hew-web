@@ -5,13 +5,19 @@ import { useSelector, useDispatch } from 'react-redux';
 import { SketchPicker } from 'react-color';
 
 import { actions } from 'reducers/application';
-import { getBrightness, getColor, getDevices } from 'selectors/application';
+import {
+  getBrightness,
+  getColor,
+  getDevices,
+  getPendingRequests
+} from 'selectors/application';
 
 export default function SendControl() {
   const dispatch = useDispatch();
   const brightness = useSelector(getBrightness);
   const color = useSelector(getColor);
   const devices = useSelector(getDevices);
+  const pendingRequests = useSelector(getPendingRequests) || [];
   const [recipientType, setRecipientType] = useState('all');
   const [selectedDevices, setSelectedDevices] = useState([]);
 
@@ -75,6 +81,14 @@ export default function SendControl() {
   } else if (brightness >= 160) {
     powerColorClass = 'warning';
   }
+
+  const hasPendingRequests = pendingRequests.length > 0;
+  const sendButtonProps = {
+    disabled: hasPendingRequests,
+    icon: hasPendingRequests ? 'spinner' : 'upload',
+    spin: hasPendingRequests,
+    variant: hasPendingRequests ? 'warning' : 'success'
+  };
 
   return (
     <Card className="mt-2">
@@ -169,13 +183,19 @@ export default function SendControl() {
             </Form.Group>
             <Col md={4}>
               <Button
-                variant="success"
+                disabled={sendButtonProps.disabled}
+                variant={sendButtonProps.variant}
                 onClick={handleSend}
                 block
                 className="hew-send"
                 aria-label="Send"
+                title="Send"
               >
-                <FontAwesomeIcon icon="upload" size="4x" />
+                <FontAwesomeIcon
+                  icon={sendButtonProps.icon}
+                  spin={sendButtonProps.spin}
+                  size="4x"
+                />
               </Button>
             </Col>
           </Row>

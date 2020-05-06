@@ -13,11 +13,16 @@ function* controlDeviceWorker({ hostname, settings }) {
       throw new Error(`Invalid device ${hostname} specified`);
     }
 
+    yield put(actions.appendNetworkLog(`Sending update to ${hostname}...`));
+    yield put(actions.addPendingRequest(hostname));
+
     const response = yield call(axios, {
       url: `http://${hostname}/`,
       method: 'POST',
       data: settings
     });
+
+    yield put(actions.removePendingRequest(hostname));
 
     if (response.status !== 200) {
       throw new Error(response.body);
@@ -28,6 +33,7 @@ function* controlDeviceWorker({ hostname, settings }) {
     yield put(
       actions.appendNetworkLog(`Error updating ${hostname}: ${error.message}`)
     );
+    yield put(actions.removePendingRequest(hostname));
   }
 }
 
