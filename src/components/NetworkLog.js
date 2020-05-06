@@ -16,7 +16,7 @@ export default function NetworkLog() {
   ]);
 
   return (
-    <Card className="mt-4">
+    <Card className="my-4">
       <Card.Body>
         <Card.Title>
           <Row>
