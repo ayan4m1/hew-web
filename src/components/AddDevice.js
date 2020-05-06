@@ -13,12 +13,13 @@ export default function AddDevice() {
   const dispatch = useDispatch();
 
   const handleSubmit = useCallback(() => {
+    setHostname('');
     dispatch(
       actions.addDevice({
         hostname: `${hostname}.local`
       })
     );
-  }, [dispatch, hostname]);
+  }, [dispatch, hostname, setHostname]);
 
   const handleHostnameChange = useCallback(
     (event) => {
