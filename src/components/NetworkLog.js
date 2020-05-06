@@ -37,8 +37,10 @@ export default function NetworkLog() {
           {networkLog.length ? (
             networkLog.map((entry) => (
               <Row key={entry.timestamp}>
-                <Col xs={4}>{format(entry.timestamp, 'mm-DD HH:mm:ss')}</Col>
-                <Col xs={8}>{entry.message}</Col>
+                <Col xs={2}>
+                  {format(entry.timestamp, 'yyyy-MM-dd HH:mm:ss')}
+                </Col>
+                <Col xs={10}>{entry.message}</Col>
               </Row>
             ))
           ) : (
