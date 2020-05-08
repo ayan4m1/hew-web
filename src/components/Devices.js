@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
+import { Helmet } from 'react-helmet';
 import { useSelector } from 'react-redux';
 
 import AddDevice from 'components/AddDevice';
@@ -13,6 +14,7 @@ export default function Devices() {
 
   return (
     <Container>
+      <Helmet title="Devices" />
       <Row className="mt-4">
         <Col>
           <h1>
