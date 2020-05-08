@@ -1,65 +1,121 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useState, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { Card, Form, Button, InputGroup } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { actions } from 'reducers/application';
 import { getDevices } from 'selectors/application';
+import { Formik } from 'formik';
 
 export default function AddDevice() {
   const devices = useSelector(getDevices);
-  const [hostname, setHostname] = useState('');
-  const [duplicateHostname, setDuplicateHostname] = useState(false);
   const dispatch = useDispatch();
 
-  const handleSubmit = useCallback(() => {
-    setHostname('');
-    dispatch(
-      actions.addDevice({
-        hostname: `${hostname}.local`
-      })
-    );
-  }, [dispatch, hostname, setHostname]);
+  const onSubmit = useCallback(
+    (values) => {
+      const { hostname, passphrase } = values;
 
-  const handleHostnameChange = useCallback(
-    (event) => {
-      const { value } = event.target;
+      dispatch(
+        actions.addDevice({
+          hostname: `${hostname}.local`,
+          passphrase
+        })
+      );
+    },
+    [dispatch]
+  );
+  const onValidate = useCallback(
+    (values) => {
+      const { hostname, passphrase } = values;
+      const errors = {};
+
+      if (!hostname || hostname.trim() === '') {
+        errors.hostname = 'Hostname is required.';
+      }
+
       const existingDevice = devices.find(
-        (device) => device.hostname === `${value}.local`
+        (device) => device.hostname === `${hostname}.local`
       );
 
-      setDuplicateHostname(Boolean(existingDevice));
-      setHostname(event.target.value);
+      if (existingDevice) {
+        errors.hostname = 'That device already exists.';
+      }
+
+      if (!passphrase) {
+        errors.passphrase = 'Passphrase is required.';
+      } else if (passphrase.length < 8) {
+        errors.passphrase = 'Passphrase must be at least eight characters.';
+      }
+
+      return errors;
     },
-    [devices, setDuplicateHostname, setHostname]
+    [devices]
   );
+  const initialValues = {
+    hostname: '',
+    passphrase: ''
+  };
 
   return (
     <Card className="my-4">
       <Card.Body>
         <Card.Title>Add Device</Card.Title>
-        <InputGroup>
-          <Form.Control
-            isInvalid={duplicateHostname}
-            onChange={handleHostnameChange}
-            placeholder="hostname"
-            type="text"
-            value={hostname}
-          />
-          <InputGroup.Append>
-            <InputGroup.Text>.local</InputGroup.Text>
-            <Button
-              disabled={hostname === '' || duplicateHostname}
-              onClick={handleSubmit}
-              variant="success"
-            >
-              <FontAwesomeIcon icon="plus-circle" />
-            </Button>
-          </InputGroup.Append>
-          <Form.Control.Feedback type="invalid">
-            A device with this hostname already exists.
-          </Form.Control.Feedback>
-        </InputGroup>
+        <Formik
+          initialValues={initialValues}
+          validate={onValidate}
+          onSubmit={onSubmit}
+        >
+          {({
+            values,
+            errors,
+            touched,
+            handleChange,
+            handleBlur,
+            handleSubmit
+          }) => (
+            <Form>
+              <Form.Group>
+                <InputGroup>
+                  <Form.Control
+                    isInvalid={errors.hostname}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    name="hostname"
+                    placeholder="hostname"
+                    type="text"
+                    value={values.hostname}
+                  />
+                  <InputGroup.Append>
+                    <InputGroup.Text>.local</InputGroup.Text>
+                  </InputGroup.Append>
+                  {touched.hostname && errors.hostname && (
+                    <Form.Control.Feedback type="invalid">
+                      {errors.hostname}
+                    </Form.Control.Feedback>
+                  )}
+                </InputGroup>
+              </Form.Group>
+              <Form.Group>
+                <Form.Control
+                  isInvalid={errors.passphrase}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  name="passphrase"
+                  type="text"
+                  value={values.passphrase}
+                />
+                {touched.passphrase && errors.passphrase && (
+                  <Form.Control.Feedback type="invalid">
+                    {errors.passphrase}
+                  </Form.Control.Feedback>
+                )}
+              </Form.Group>
+              <Button onClick={handleSubmit} variant="success">
+                <FontAwesomeIcon icon="plus-circle" /> Add
+              </Button>
+            </Form>
+          )}
+        </Formik>
       </Card.Body>
     </Card>
   );

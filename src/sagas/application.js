@@ -19,7 +19,10 @@ function* controlDeviceWorker({ hostname, settings }) {
     const response = yield call(axios, {
       url: `http://${hostname}/`,
       method: 'POST',
-      data: settings
+      data: {
+        ...settings,
+        p: device.passphrase
+      }
     });
 
     yield put(actions.removePendingRequest(hostname));

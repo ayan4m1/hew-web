@@ -1,8 +1,10 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faEraser,
+  faEdit,
   faLightbulb,
   faPlusCircle,
+  faSave,
   faServer,
   faSlidersH,
   faSpinner,
@@ -12,8 +14,10 @@ import {
 
 library.add(
   faEraser,
+  faEdit,
   faLightbulb,
   faPlusCircle,
+  faSave,
   faServer,
   faSlidersH,
   faSpinner,
