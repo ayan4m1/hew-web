@@ -12,7 +12,7 @@ export default function Header() {
       <Navbar.Toggle />
       <Navbar.Collapse>
         <Nav>
-          <Nav.Link as={Link} to="/control">
+          <Nav.Link as={Link} to="/">
             <FontAwesomeIcon icon="sliders-h" /> Control
           </Nav.Link>
           <Nav.Link as={Link} to="/devices">
