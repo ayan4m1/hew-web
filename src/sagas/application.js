@@ -19,9 +19,12 @@ function* controlDeviceWorker({ hostname, settings }) {
     const response = yield call(axios, {
       url: `http://${hostname}/`,
       method: 'POST',
+      headers: {
+        Authorization: device.passphrase
+      },
       data: {
         ...settings,
-        p: device.passphrase
+        p: 'SOLID'
       }
     });
 
