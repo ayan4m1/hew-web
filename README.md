@@ -5,6 +5,7 @@
 ## Features
 
 - Control color and brightness of the [Hew D1](https://github.com/ayan4m1/hew-d1)
+- Set animation pattern (currently solid or marquee)
 - Update multiple/specific devices simultaneously
 
 ## Usage
@@ -33,4 +34,4 @@ Use the devices page to manage devices. This data will be stored in browser loca
 
 - Overcome mixed-content limitations using TLS on devices
 - Add Apple HomeKit / Alexa / Google Home integration
-- Animations and gradients
+- Gradients
