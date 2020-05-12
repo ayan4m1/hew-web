@@ -22,10 +22,7 @@ function* controlDeviceWorker({ hostname, settings }) {
       headers: {
         Authorization: device.passphrase
       },
-      data: {
-        ...settings,
-        p: 'SOLID'
-      }
+      data: settings
     });
 
     yield put(actions.removePendingRequest(hostname));

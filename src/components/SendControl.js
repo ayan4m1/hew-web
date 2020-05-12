@@ -9,7 +9,8 @@ import {
   getBrightness,
   getColor,
   getDevices,
-  getPendingRequests
+  getPendingRequests,
+  getPattern
 } from 'selectors/application';
 
 export default function SendControl() {
@@ -17,6 +18,7 @@ export default function SendControl() {
   const brightness = useSelector(getBrightness);
   const color = useSelector(getColor);
   const devices = useSelector(getDevices);
+  const pattern = useSelector(getPattern);
   const pendingRequests = useSelector(getPendingRequests) || [];
   const [recipientType, setRecipientType] = useState('all');
   const [selectedDevices, setSelectedDevices] = useState([]);
@@ -43,11 +45,20 @@ export default function SendControl() {
           r: color.r,
           g: color.g,
           b: color.b,
-          br: parseInt(brightness, 10)
+          br: parseInt(brightness, 10),
+          p: pattern
         })
       );
     }
-  }, [brightness, color, devices, dispatch, recipientType, selectedDevices]);
+  }, [
+    brightness,
+    color,
+    devices,
+    dispatch,
+    pattern,
+    recipientType,
+    selectedDevices
+  ]);
 
   const handleSetRecipientType = useCallback(
     (event) => setRecipientType(event.target.value),
@@ -61,6 +72,11 @@ export default function SendControl() {
 
   const handleSetColor = useCallback(
     (newColor) => dispatch(actions.setColor(newColor.rgb)),
+    [dispatch]
+  );
+
+  const handleSetPattern = useCallback(
+    (event) => dispatch(actions.setPattern(event.target.value)),
     [dispatch]
   );
 
@@ -139,6 +155,13 @@ export default function SendControl() {
                     ))}
                   </Form.Control>
                 ) : null}
+              </Form.Group>
+              <Form.Group as={Col}>
+                <Form.Label>Pattern</Form.Label>
+                <Form.Control as="select" onChange={handleSetPattern}>
+                  <option value="SOLID">Solid</option>
+                  <option value="MARQUEE">Marquee</option>
+                </Form.Control>
               </Form.Group>
               <Form.Group as={Col}>
                 <Form.Label>Brightness</Form.Label>
