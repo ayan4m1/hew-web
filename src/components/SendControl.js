@@ -4,7 +4,7 @@ import { Button, Card, Row, Col, Form, InputGroup } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { SketchPicker } from 'react-color';
 
-import { actions } from 'reducers/application';
+import { actions, patterns } from 'reducers/application';
 import {
   getBrightness,
   getColor,
@@ -158,9 +158,16 @@ export default function SendControl() {
               </Form.Group>
               <Form.Group as={Col}>
                 <Form.Label>Pattern</Form.Label>
-                <Form.Control as="select" onChange={handleSetPattern}>
-                  <option value="SOLID">Solid</option>
-                  <option value="MARQUEE">Marquee</option>
+                <Form.Control
+                  as="select"
+                  value={pattern}
+                  onChange={handleSetPattern}
+                >
+                  {Object.entries(patterns).map(([key, value]) => (
+                    <option key={key} value={key}>
+                      {value}
+                    </option>
+                  ))}
                 </Form.Control>
               </Form.Group>
               <Form.Group as={Col}>
