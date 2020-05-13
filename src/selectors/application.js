@@ -31,3 +31,8 @@ export const getPendingRequests = createSelector(
   getApplication,
   (application) => application.pendingRequests
 );
+
+export const getSpeed = createSelector(
+  getApplication,
+  (application) => application.speed
+);

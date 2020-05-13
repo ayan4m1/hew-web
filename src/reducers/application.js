@@ -13,7 +13,8 @@ export const types = buildActions('application', [
   'REMOVE_PENDING_REQUEST',
   'SET_BRIGHTNESS',
   'SET_COLOR',
-  'SET_PATTERN'
+  'SET_PATTERN',
+  'SET_SPEED'
 ]);
 
 const addDevice = (device) => ({
@@ -72,6 +73,11 @@ const setPattern = (pattern) => ({
   pattern
 });
 
+const setSpeed = (speed) => ({
+  type: types.SET_SPEED,
+  speed
+});
+
 export const actions = {
   addDevice,
   addPendingRequest,
@@ -83,7 +89,8 @@ export const actions = {
   removePendingRequest,
   setBrightness,
   setColor,
-  setPattern
+  setPattern,
+  setSpeed
 };
 
 export const patterns = {
@@ -98,6 +105,7 @@ export const initialState = {
     g: 0,
     b: 0
   },
+  speed: 127,
   pattern: patterns.SOLID,
   devices: [],
   networkLog: [],
@@ -216,6 +224,11 @@ export const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         pattern: action.pattern
+      };
+    case types.SET_SPEED:
+      return {
+        ...state,
+        speed: action.speed
       };
     default:
       return state;
