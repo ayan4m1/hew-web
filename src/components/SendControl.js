@@ -40,25 +40,9 @@ export default function SendControl() {
     }
 
     for (const recipient of recipients) {
-      dispatch(
-        actions.controlDevice(recipient.hostname, {
-          r: color.r,
-          g: color.g,
-          b: color.b,
-          br: parseInt(brightness, 10),
-          p: pattern
-        })
-      );
+      dispatch(actions.controlDevice(recipient.hostname));
     }
-  }, [
-    brightness,
-    color,
-    devices,
-    dispatch,
-    pattern,
-    recipientType,
-    selectedDevices
-  ]);
+  }, [devices, dispatch, recipientType, selectedDevices]);
 
   const handleSetRecipientType = useCallback(
     (event) => setRecipientType(event.target.value),

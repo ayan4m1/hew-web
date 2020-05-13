@@ -2,10 +2,20 @@ import axios from 'axios';
 import { all, takeEvery, select, put, call } from 'redux-saga/effects';
 
 import { types, actions } from 'reducers/application';
-import { getDevices } from 'selectors/application';
+import {
+  getColor,
+  getDevices,
+  getBrightness,
+  getPattern,
+  getSpeed
+} from 'selectors/application';
 
-function* controlDeviceWorker({ hostname, settings }) {
+function* controlDeviceWorker({ hostname }) {
   try {
+    const color = yield select(getColor);
+    const brightness = yield select(getBrightness);
+    const pattern = yield select(getPattern);
+    const speed = yield select(getSpeed);
     const devices = yield select(getDevices);
     const device = devices.find((dev) => dev.hostname === hostname);
 
@@ -22,7 +32,12 @@ function* controlDeviceWorker({ hostname, settings }) {
       headers: {
         Authorization: device.passphrase
       },
-      data: settings
+      data: {
+        startColor: color,
+        brightness,
+        pattern,
+        speed
+      }
     });
 
     yield put(actions.removePendingRequest(hostname));

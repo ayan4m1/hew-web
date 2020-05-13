@@ -36,10 +36,9 @@ const clearNetworkLog = () => ({
   type: types.CLEAR_NETWORK_LOG
 });
 
-const controlDevice = (hostname, settings) => ({
+const controlDevice = (hostname) => ({
   type: types.CONTROL_DEVICE,
-  hostname,
-  settings
+  hostname
 });
 
 const editDevice = (hostname, device) => ({
