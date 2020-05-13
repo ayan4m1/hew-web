@@ -10,7 +10,8 @@ import {
   getColor,
   getDevices,
   getPendingRequests,
-  getPattern
+  getPattern,
+  getSpeed
 } from 'selectors/application';
 
 export default function SendControl() {
@@ -19,6 +20,7 @@ export default function SendControl() {
   const color = useSelector(getColor);
   const devices = useSelector(getDevices);
   const pattern = useSelector(getPattern);
+  const speed = useSelector(getSpeed);
   const pendingRequests = useSelector(getPendingRequests) || [];
   const [recipientType, setRecipientType] = useState('all');
   const [selectedDevices, setSelectedDevices] = useState([]);
@@ -61,6 +63,11 @@ export default function SendControl() {
 
   const handleSetPattern = useCallback(
     (event) => dispatch(actions.setPattern(event.target.value)),
+    [dispatch]
+  );
+
+  const handleSetSpeed = useCallback(
+    (event) => dispatch(actions.setSpeed(event.target.value)),
     [dispatch]
   );
 
@@ -184,6 +191,25 @@ export default function SendControl() {
                     Warning! Do not look directly at LEDs!
                   </span>
                 ) : null}
+              </Form.Group>
+              <Form.Group as={Col}>
+                <Form.Label>Speed</Form.Label>
+                <InputGroup>
+                  <Form.Control
+                    className="hew-range"
+                    type="range"
+                    min="5"
+                    max="255"
+                    step="5"
+                    value={speed}
+                    onChange={handleSetSpeed}
+                  />
+                  <InputGroup.Append>
+                    <InputGroup.Text>
+                      {Math.floor((speed / 127.0) * 100)}%
+                    </InputGroup.Text>
+                  </InputGroup.Append>
+                </InputGroup>
               </Form.Group>
             </Col>
             <Form.Group as={Col} md={4}>
