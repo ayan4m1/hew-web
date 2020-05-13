@@ -95,6 +95,7 @@ export const actions = {
 
 export const patterns = {
   SOLID: 'Solid',
+  GRADIENT: 'Gradient',
   MARQUEE: 'Marquee'
 };
 
