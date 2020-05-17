@@ -3,16 +3,18 @@ import { all, takeEvery, select, put, call } from 'redux-saga/effects';
 
 import { types, actions } from 'reducers/application';
 import {
-  getColor,
   getDevices,
   getBrightness,
   getPattern,
-  getSpeed
+  getSpeed,
+  getStartColor,
+  getEndColor
 } from 'selectors/application';
 
 function* controlDeviceWorker({ hostname }) {
   try {
-    const color = yield select(getColor);
+    const startColor = yield select(getStartColor);
+    const endColor = yield select(getEndColor);
     const brightness = yield select(getBrightness);
     const pattern = yield select(getPattern);
     const speed = yield select(getSpeed);
@@ -33,7 +35,8 @@ function* controlDeviceWorker({ hostname }) {
         Authorization: device.passphrase
       },
       data: {
-        startColor: color,
+        startColor,
+        endColor,
         brightness,
         pattern,
         speed

@@ -7,9 +7,14 @@ export const getBrightness = createSelector(
   (application) => application.brightness
 );
 
-export const getColor = createSelector(
+export const getStartColor = createSelector(
   getApplication,
-  (application) => application.color
+  (application) => application.startColor
+);
+
+export const getEndColor = createSelector(
+  getApplication,
+  (application) => application.endColor
 );
 
 export const getDevices = createSelector(

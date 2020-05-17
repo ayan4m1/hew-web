@@ -4,26 +4,28 @@ import { Button, Card, Row, Col, Form, InputGroup } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
 import { SketchPicker } from 'react-color';
 
+import GradientSlider from 'components/GradientSlider';
 import { actions, patterns } from 'reducers/application';
 import {
   getBrightness,
-  getColor,
   getDevices,
   getPendingRequests,
   getPattern,
-  getSpeed
+  getSpeed,
+  getStartColor
 } from 'selectors/application';
 
 export default function SendControl() {
   const dispatch = useDispatch();
   const brightness = useSelector(getBrightness);
-  const color = useSelector(getColor);
   const devices = useSelector(getDevices);
   const pattern = useSelector(getPattern);
   const speed = useSelector(getSpeed);
+  const startColor = useSelector(getStartColor);
   const pendingRequests = useSelector(getPendingRequests) || [];
   const [recipientType, setRecipientType] = useState('all');
   const [selectedDevices, setSelectedDevices] = useState([]);
+  const [color, setColor] = useState(startColor);
 
   const handleSend = useCallback(() => {
     let recipients = [];
@@ -52,13 +54,14 @@ export default function SendControl() {
   );
 
   const handleSetBrightness = useCallback(
-    (event) => dispatch(actions.setBrightness(event.target.value)),
+    (event) =>
+      dispatch(actions.setBrightness(parseInt(event.target.value, 10))),
     [dispatch]
   );
 
   const handleSetColor = useCallback(
-    (newColor) => dispatch(actions.setColor(newColor.rgb)),
-    [dispatch]
+    (newColor) => setColor(newColor.hex.replace('#', '')),
+    [setColor]
   );
 
   const handleSetPattern = useCallback(
@@ -212,15 +215,21 @@ export default function SendControl() {
                 </InputGroup>
               </Form.Group>
             </Col>
-            <Form.Group as={Col} md={4}>
-              <Form.Label>Color</Form.Label>
-              <SketchPicker
-                width="90%"
-                disableAlpha
-                color={color}
-                onChangeComplete={handleSetColor}
-              />
-            </Form.Group>
+            <Col md={4}>
+              <Form.Group>
+                <Form.Label>Gradient</Form.Label>
+                <GradientSlider color={color} />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Color</Form.Label>
+                <SketchPicker
+                  width="90%"
+                  disableAlpha
+                  color={color}
+                  onChangeComplete={handleSetColor}
+                />
+              </Form.Group>
+            </Col>
             <Col md={4}>
               <Button
                 disabled={sendButtonProps.disabled}

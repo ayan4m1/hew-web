@@ -12,7 +12,8 @@ export const types = buildActions('application', [
   'REMOVE_DEVICE',
   'REMOVE_PENDING_REQUEST',
   'SET_BRIGHTNESS',
-  'SET_COLOR',
+  'SET_START_COLOR',
+  'SET_END_COLOR',
   'SET_PATTERN',
   'SET_SPEED'
 ]);
@@ -62,8 +63,13 @@ const setBrightness = (brightness) => ({
   brightness
 });
 
-const setColor = (color) => ({
-  type: types.SET_COLOR,
+const setStartColor = (color) => ({
+  type: types.SET_START_COLOR,
+  color
+});
+
+const setEndColor = (color) => ({
+  type: types.SET_END_COLOR,
   color
 });
 
@@ -87,7 +93,8 @@ export const actions = {
   removeDevice,
   removePendingRequest,
   setBrightness,
-  setColor,
+  setStartColor,
+  setEndColor,
   setPattern,
   setSpeed
 };
@@ -100,11 +107,8 @@ export const patterns = {
 
 export const initialState = {
   brightness: 0,
-  color: {
-    r: 0,
-    g: 0,
-    b: 0
-  },
+  startColor: 'FF0000',
+  endColor: '0000FF',
   speed: 127,
   pattern: patterns.SOLID,
   devices: [],
@@ -215,10 +219,15 @@ export const reducer = (state = initialState, action = {}) => {
         ...state,
         brightness: action.brightness
       };
-    case types.SET_COLOR:
+    case types.SET_START_COLOR:
       return {
         ...state,
-        color: action.color
+        startColor: action.color
+      };
+    case types.SET_END_COLOR:
+      return {
+        ...state,
+        endColor: action.color
       };
     case types.SET_PATTERN:
       return {
