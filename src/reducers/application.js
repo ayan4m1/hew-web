@@ -102,7 +102,8 @@ export const actions = {
 export const patterns = {
   SOLID: 'Solid',
   GRADIENT: 'Gradient',
-  MARQUEE: 'Marquee'
+  MARQUEE: 'Marquee',
+  BREATHING: 'Breathing'
 };
 
 export const initialState = {
