@@ -70,7 +70,7 @@ export default function SendControl() {
   );
 
   const handleSetSpeed = useCallback(
-    (event) => dispatch(actions.setSpeed(event.target.value)),
+    (event) => dispatch(actions.setSpeed(parseInt(event.target.value, 10))),
     [dispatch]
   );
 
