@@ -1,13 +1,12 @@
 import webpack from 'webpack';
 import { resolve } from 'path';
-import { CLIEngine } from 'eslint';
 import HtmlPlugin from 'html-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 import CnameWebpackPlugin from 'cname-webpack-plugin';
 import StylelintPlugin from 'stylelint-webpack-plugin';
 import MiniCSSExtractPlugin from 'mini-css-extract-plugin';
 import { CleanWebpackPlugin as CleanPlugin } from 'clean-webpack-plugin';
-import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
+import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 
 const dev = process.env.NODE_ENV === 'development';
 
@@ -38,7 +37,7 @@ if (dev) {
 
 export default {
   mode: dev ? 'development' : 'production',
-  devtool: dev ? 'cheap-module-eval-source-map' : 'cheap-module-source-map',
+  devtool: dev ? 'eval-cheap-module-source-map' : 'cheap-module-source-map',
   entry: './src/index.js',
   devServer: {
     compress: dev,
@@ -53,15 +52,7 @@ export default {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: [
-          'babel-loader',
-          {
-            loader: 'eslint-loader',
-            options: {
-              formatter: CLIEngine.getFormatter('stylish')
-            }
-          }
-        ]
+        use: ['babel-loader', 'eslint-loader']
       },
       {
         test: /\.(sa|sc|c)ss$/,
@@ -71,12 +62,14 @@ export default {
           {
             loader: 'postcss-loader',
             options: {
-              ident: 'postcss',
-              plugins: [
-                require('autoprefixer'),
-                require('postcss-flexbugs-fixes')
-              ],
-              sourceMap: dev
+              postcssOptions: {
+                ident: 'postcss',
+                plugins: [
+                  require('autoprefixer'),
+                  require('postcss-flexbugs-fixes')
+                ],
+                sourceMap: dev
+              }
             }
           },
           'sass-loader'
@@ -95,7 +88,7 @@ export default {
   },
   output: {
     path: resolve(__dirname, 'dist'),
-    filename: 'main.js',
+    filename: '[name].js',
     chunkFilename: '[name].js'
   },
   plugins,
@@ -111,10 +104,10 @@ export default {
     minimizer: [
       new TerserPlugin({
         terserOptions: {
-          ecma: 9
+          ecma: 12
         }
       }),
-      new OptimizeCSSAssetsPlugin({})
+      new CssMinimizerPlugin()
     ],
     splitChunks: {
       cacheGroups: {
@@ -130,7 +123,6 @@ export default {
           priority: -1,
           name: 'vendor-react',
           chunks: 'all',
-
           test: /[\\/]node_modules[\\/](react|redux)/
         }
       }

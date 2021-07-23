@@ -18,10 +18,10 @@ export default function EditDevice(props) {
     dispatch(actions.removeDevice(hostname));
   }, [dispatch, hostname]);
 
-  const handleEditToggle = useCallback(() => setEditing(!editing), [
-    editing,
-    setEditing
-  ]);
+  const handleEditToggle = useCallback(
+    () => setEditing(!editing),
+    [editing, setEditing]
+  );
 
   const onValidate = (values) => {
     const { passphrase } = values;

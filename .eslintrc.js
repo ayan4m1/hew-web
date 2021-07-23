@@ -15,16 +15,15 @@ module.exports = {
     'plugin:jsx-a11y/recommended',
     'plugin:react-hooks/recommended',
     'plugin:import/errors',
-    'prettier',
-    'prettier/react'
+    'prettier'
   ],
-  parser: 'babel-eslint',
+  parser: '@babel/eslint-parser',
   parserOptions: {
+    requireConfigFile: false,
     ecmaFeatures: {
       jsx: true
     },
-    ecmaVersion: 9,
-    sourceType: 'module'
+    ecmaVersion: 12
   },
   rules: {
     'accessor-pairs': 2,

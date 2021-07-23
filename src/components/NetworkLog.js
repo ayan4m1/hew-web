@@ -11,9 +11,10 @@ export default function NetworkLog() {
   const dispatch = useDispatch();
   const networkLog = useSelector(getNetworkLog);
 
-  const handleClear = useCallback(() => dispatch(actions.clearNetworkLog()), [
-    dispatch
-  ]);
+  const handleClear = useCallback(
+    () => dispatch(actions.clearNetworkLog()),
+    [dispatch]
+  );
 
   return (
     <Card className="my-4">
